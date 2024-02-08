@@ -44,6 +44,7 @@ def update_status_csv(path_to_status_csv):
             status.loc[path, "cellpose_masks"] = False
 
     status.to_csv(path_to_status_csv)
+    print("Status.csv updated.")
 
 
 def cellpose_segment(im_dir, batch_size, gpu=False, channels=[2,1]):
@@ -58,6 +59,7 @@ def cellpose_segment(im_dir, batch_size, gpu=False, channels=[2,1]):
     # Load Status.csv to continue from where the segmentation was interrupted
     if os.path.exists(os.path.join(im_dir, "Status.csv")):
         print("Status.csv found.")
+        update_status_csv(os.path.join(im_dir, "Status.csv"))
         status = pd.read_csv(os.path.join(im_dir, "Status.csv"), index_col=0)
         im_paths = status.loc[status.loc[:, "cellpose_masks"] == False].index.to_list()
     else:
