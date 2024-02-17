@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="DVP" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="DVP" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="aicsimageio" project-jdk-type="Python SDK" />
 </project>
