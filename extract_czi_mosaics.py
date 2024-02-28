@@ -12,9 +12,19 @@ from tifffile import imwrite
 from tqdm import tqdm
 
 
-def save_czi_mosaics_as_tiffs(path_to_czi_file, separate_channels=True, output_folder_path=None):
+def extract_czi_mosaics_as_tiffs(path_to_czi_file,
+                                 output_folder_path=None,
+                                 separate_channels=False,
+                                 channel_order=('AF555', 'SYTOG', 'AF647')):
     """
-    Written tiff files are problematic. Somehow Cellpose doesn't distinguish between channels. Why?
+    Order of channels will show up in CellPose as RGB, however it does not come up with the correct order. Somehow
+    the channel_order argument has absolutely no effect on the order of channels?
+
+    ToDo:
+    - Write a docstring
+    - Fix the order issue
+    - Add optional parameter to use channel numbers instead of channel names to make the function compatible with
+    20240214_TIFF_combine_cellposeSeg_Onur.ipynb
     """
 
     # Check if the given path is a .czi file
@@ -69,7 +79,6 @@ def save_czi_mosaics_as_tiffs(path_to_czi_file, separate_channels=True, output_f
                             imwrite(mosaic_filename, mosaic_data_im)
                     else:
                         # Save a multichannel image
-                        channel_order = ['AF555', 'SYTOG', 'AF647']  # Order of channels will show up in CellPose as RGB
 
                         mosaic_data_oom = img.get_image_dask_data(dimension_order_out="YXC", T=T, Z=Z, M=M)
                         mosaic_data_im = mosaic_data_oom.compute()  # Get the np array of the mosaic in memory
@@ -77,7 +86,7 @@ def save_czi_mosaics_as_tiffs(path_to_czi_file, separate_channels=True, output_f
                         empty_mosaic = [None] * len(channel_order)
 
                         for ch, channel in enumerate(channel_order):
-                            empty_mosaic[ch] = mosaic_data_im[:, :, img.channel_names.index(channel)]
+                            empty_mosaic[ch] = mosaic_data_im[:, :, img.channel_names.index(channel)].copy()
 
                         reordered_mosaic = np.dstack(empty_mosaic)
 
@@ -97,4 +106,4 @@ if __name__ == "__main__":
         print("Usage: python script.py path/to/your/file.czi")
     else:
         czi_file_path = sys.argv[1]
-        save_czi_mosaics_as_tiffs(czi_file_path)
+        extract_czi_mosaics_as_tiffs(czi_file_path)
