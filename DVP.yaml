@@ -1,0 +1,32 @@
+# DVP.yaml
+# Conda environment recipe for the DVP pipeline Toolbox
+# Onur Serçe
+# https://github.com/onurserce/DeepVisualProteomics
+
+# Usage:
+# conda env create -f DVP.yaml
+
+name: DVP
+channels:
+  - conda-forge
+  - defaults
+  - pytorch
+dependencies:
+  - pip
+  - python
+  - ipython
+  - pytorch
+  - torchvision
+  - torchaudio
+  - pip:
+    - aicsimageio
+#    - "cellpose[gui]"  Will be built from my fork of the original source [https://github.com/onurserce/cellpose.git]
+    - notebook
+    - bioformats_jar
+    - pyyaml
+    - pandas
+    - numpy
+    - seaborn
+    - matplotlib
+    - tqdm
+    - dash
