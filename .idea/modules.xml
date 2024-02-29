@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/DeepVisualProteomics.iml" filepath="$PROJECT_DIR$/.idea/DeepVisualProteomics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../cellpose/.idea/cellpose.iml" filepath="$PROJECT_DIR$/../cellpose/.idea/cellpose.iml" />
     </modules>
   </component>
 </project>
