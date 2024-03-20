@@ -31,3 +31,4 @@ dependencies:
     - matplotlib
     - tqdm
     - dash
+    - PySide6
