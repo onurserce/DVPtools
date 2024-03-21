@@ -1,31 +1,15 @@
-#  ToDo: Add ArgumentParser (from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter).
-#   Check out https://github.com/onurserce/campy/blob/9a7633f9eaae737606355ff67f0701aaea1d8f38/campy/campy.py for an
-#   elegant usage of the ArgumentParser together with a config.yaml file.
-
-#  ToDo: What's the best way to pass an argument to the script to tell if frames are to be extracted separately or not?
-
 import os
 import numpy as np
 import sys
 from aicsimageio import AICSImage
 from tifffile import imwrite
 from tqdm import tqdm
+from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 
 
 def extract_czi_mosaics_as_tiffs(path_to_czi_file,
                                  output_folder_path=None,
-                                 separate_channels=False,
-                                 channel_order=('AF555', 'SYTOG', 'AF647')):
-    """
-    Order of channels will show up in CellPose as RGB, however it does not come up with the correct order. Somehow
-    the channel_order argument has absolutely no effect on the order of channels?
-
-    ToDo:
-    - Write a docstring
-    - Fix the order issue
-    - Add optional parameter to use channel numbers instead of channel names to make the function compatible with
-    20240214_TIFF_combine_cellposeSeg_Onur.ipynb
-    """
+                                 separate_channels=True):
 
     # Check if the given path is a .czi file
     if not path_to_czi_file.endswith('.czi'):
@@ -100,10 +84,20 @@ def extract_czi_mosaics_as_tiffs(path_to_czi_file,
 
     print(f"Finished extracting mosaics.")
 
+    def main(args):
+        extract_czi_mosaics_as_tiffs(
+            path_to_czi_file=args.czi_file_path,
+            output_folder_path=args.output_folder_path,
+            separate_channels=args.separate_channels,
+            channel_order=tuple(args.channel_order.split(','))
+        )
+
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python script.py path/to/your/file.czi")
-    else:
-        czi_file_path = sys.argv[1]
-        extract_czi_mosaics_as_tiffs(czi_file_path)
+    parser = ArgumentParser(description="Extract CZI mosaics as TIFF images.", formatter_class=ArgumentDefaultsHelpFormatter)
+    parser.add_argument('czi_file_path', help="Path to the .czi file.")
+    parser.add_argument('--output-folder-path', help="Path to the output folder.", default=None)
+    parser.add_argument('--separate-channels', action='store_true', help="Save each channel as a separate image.")
+
+    args = parser.parse_args()
+    main(args)
