@@ -32,3 +32,4 @@ dependencies:
     - tqdm
     - dash
     - PySide6
+    - "napari[all]"
