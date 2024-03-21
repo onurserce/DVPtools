@@ -38,7 +38,7 @@ def create_new_project(project_dir: str, project_name: str) -> None:
         project_name = "NewProject"  # Default project name
 
     full_path = os.path.join(project_dir, project_name)
-    os.makedirs(full_path, exist_ok=True)
+    os.makedirs(full_path, exist_ok=False)
 
     # Separately create the initial config file
     create_config_file(full_path, project_name)
