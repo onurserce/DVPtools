@@ -1,13 +1,18 @@
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QFileDialog, QLineEdit, QVBoxLayout, QWidget, \
     QMessageBox, QLabel
-from project_utils import create_new_project
+from project_utils import create_new_project, load_project_config
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Project Creator")
+        self.config = None
+        self.setWindowTitle("Project Creator & Loader")
         self.selected_directory = None  # To store the selected directory path
+        # Variables to store project config
+        self.project_name = None
+        self.project_directory = None
+        self.creation_timestamp = None
 
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
@@ -33,6 +38,15 @@ class MainWindow(QMainWindow):
         self.create_project_button.clicked.connect(self.on_create_new_project)
         self.create_project_button.setEnabled(False)  # Disabled initially
         layout.addWidget(self.create_project_button)
+
+        # Button to load project config
+        self.load_project_button = QPushButton("Load Project")
+        self.load_project_button.clicked.connect(self.on_load_project)
+        layout.addWidget(self.load_project_button)
+
+        # Label to display loaded project info
+        self.project_info_label = QLabel("No project loaded")
+        layout.addWidget(self.project_info_label)
 
     def on_select_directory(self):
         project_dir = QFileDialog.getExistingDirectory(self, "Select Project Directory")
@@ -65,6 +79,23 @@ class MainWindow(QMainWindow):
         else:
             # This condition may not be necessary if the button is disabled correctly
             QMessageBox.warning(self, "Directory Not Selected", "Please select a project directory first.")
+
+    def on_load_project(self):
+        config_path = QFileDialog.getOpenFileName(self, "Select config.yaml", "", "YAML Files (*.yaml *.yml)")[0]
+        if config_path:
+            self.config = load_project_config(config_path)
+            if self.config:
+                self.project_name = self.config.get('project_name', 'Unknown Project')
+                self.project_directory = self.config.get('project_directory', 'Unknown Directory')
+                self.creation_timestamp = self.config.get('creation_timestamp', 'Unknown Timestamp')
+
+                self.project_info_label.setText(f"Project Name: {self.project_name}\n"
+                                                f"Directory: {self.project_directory}\n"
+                                                f"Created: {self.creation_timestamp}")
+            else:
+                QMessageBox.warning(self, "Load Project", "Failed to load the project configuration.")
+        else:
+            QMessageBox.warning(self, "Load Project", "No config file selected.")
 
 
 def show_message(title: str, message: str, icon: QMessageBox.Icon = QMessageBox.Information) -> None:

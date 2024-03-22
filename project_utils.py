@@ -26,6 +26,26 @@ def create_config_file(project_path: str, project_name: str) -> None:
         yaml.dump(config, config_file)
 
 
+def load_project_config(config_path: str) -> dict:
+    """
+    Loads the project configuration from a YAML file.
+
+    Parameters:
+    - config_path (str): The path to the config.yaml file.
+
+    Returns:
+    - dict: A dictionary containing the project configuration. Returns an empty dictionary if loading fails.
+    """
+    # ToDo: Don't return empty dictionary, that could cause silent errors.
+    try:
+        with open(config_path, 'r') as config_file:
+            config = yaml.safe_load(config_file)
+            return config if config else {}
+    except Exception as e:
+        print(f"Failed to load project configuration: {e}")
+        return {}
+
+
 def create_new_project(project_dir: str, project_name: str) -> None:
     """
     Creates a new project directory.
