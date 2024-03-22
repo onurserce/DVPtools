@@ -6,15 +6,28 @@ from project_utils import create_new_project, load_project_config
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.config = None
         self.setWindowTitle("Project Creator & Loader")
+
+        # Setting the window size to half of the screen size
+        screen = QApplication.primaryScreen()
+        size = screen.size()
+        self.resize(size.width() // 2, size.height() // 2)
+
+        # Centering the window on the screen
+        rect = self.frameGeometry()
+        center_point = screen.availableGeometry().center()
+        rect.moveCenter(center_point)
+        self.move(rect.topLeft())
+
+        # Class attributes
+        self.config = None
         self.selected_directory = None  # To store the selected directory path
+        self.project_info_label = QLabel("No project loaded")
 
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         layout = QVBoxLayout(central_widget)
 
-        self.project_info_label = QLabel("No project loaded")
         layout.addWidget(self.project_info_label)
 
         self.load_project_button = QPushButton("Load Project")
