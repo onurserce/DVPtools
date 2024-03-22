@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QFileDialog, QLineEdit, QVBoxLayout, QWidget, \
-    QMessageBox, QLabel
+    QMessageBox, QLabel, QGroupBox
 from project_utils import create_new_project, load_project_config
 
 
@@ -7,54 +7,58 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Project Creator & Loader")
+        self.config = None
+        self.selected_directory = None
+        self.init_ui()
+        self.center_window()
+        self.update_ui_state(reset=True)
 
-        # Setting the window size to half of the screen size
+    def center_window(self):
         screen = QApplication.primaryScreen()
         size = screen.size()
         self.resize(size.width() // 2, size.height() // 2)
-
-        # Centering the window on the screen
         rect = self.frameGeometry()
         center_point = screen.availableGeometry().center()
         rect.moveCenter(center_point)
         self.move(rect.topLeft())
 
-        # Class attributes
-        self.config = None
-        self.selected_directory = None  # To store the selected directory path
-        self.project_info_label = QLabel("No project loaded")
-
+    def init_ui(self):
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         layout = QVBoxLayout(central_widget)
 
-        layout.addWidget(self.project_info_label)
-
+        # Load project group
         self.load_project_button = QPushButton("Load Project")
         self.load_project_button.clicked.connect(self.on_load_project)
-        layout.addWidget(self.load_project_button)
+        load_project_group = QGroupBox("Load Project")
+        load_project_layout = QVBoxLayout(load_project_group)
+        load_project_layout.addWidget(self.load_project_button)
+        layout.addWidget(load_project_group)
 
+        # New project group
         self.select_dir_button = QPushButton("Select Project Directory")
         self.select_dir_button.clicked.connect(self.on_select_directory)
-        layout.addWidget(self.select_dir_button)
-
         self.selected_dir_label = QLabel("Selected directory: None")
-        layout.addWidget(self.selected_dir_label)
-
         self.project_name_input = QLineEdit()
         self.project_name_input.setPlaceholderText("Enter project name")
-        layout.addWidget(self.project_name_input)
-
         self.create_project_button = QPushButton("Create New Project")
         self.create_project_button.clicked.connect(self.on_create_new_project)
-        layout.addWidget(self.create_project_button)
+        new_project_group = QGroupBox("New Project")
+        new_project_layout = QVBoxLayout(new_project_group)
+        new_project_layout.addWidget(self.select_dir_button)
+        new_project_layout.addWidget(self.selected_dir_label)
+        new_project_layout.addWidget(self.project_name_input)
+        new_project_layout.addWidget(self.create_project_button)
+        layout.addWidget(new_project_group)
 
-        # Reset button to re-enable UI for new project creation or loading
+        # Reset button
         self.reset_button = QPushButton("Reset")
         self.reset_button.clicked.connect(self.on_reset)
         layout.addWidget(self.reset_button)
 
-        self.update_ui_state(reset=True)  # Initialize UI state
+        # Project info label
+        self.project_info_label = QLabel("No project loaded")
+        layout.addWidget(self.project_info_label)
 
     def on_select_directory(self):
         project_dir = QFileDialog.getExistingDirectory(self, "Select Project Directory")
