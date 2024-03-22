@@ -18,6 +18,15 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(central_widget)
         layout = QVBoxLayout(central_widget)
 
+        # Label to display loaded project info
+        self.project_info_label = QLabel("No project loaded")
+        layout.addWidget(self.project_info_label)
+
+        # Button to load project config
+        self.load_project_button = QPushButton("Load Project")
+        self.load_project_button.clicked.connect(self.on_load_project)
+        layout.addWidget(self.load_project_button)
+
         # Button to select the project directory
         self.select_dir_button = QPushButton("Select Project Directory")
         self.select_dir_button.clicked.connect(self.on_select_directory)
@@ -38,15 +47,6 @@ class MainWindow(QMainWindow):
         self.create_project_button.clicked.connect(self.on_create_new_project)
         self.create_project_button.setEnabled(False)  # Disabled initially
         layout.addWidget(self.create_project_button)
-
-        # Button to load project config
-        self.load_project_button = QPushButton("Load Project")
-        self.load_project_button.clicked.connect(self.on_load_project)
-        layout.addWidget(self.load_project_button)
-
-        # Label to display loaded project info
-        self.project_info_label = QLabel("No project loaded")
-        layout.addWidget(self.project_info_label)
 
     def on_select_directory(self):
         project_dir = QFileDialog.getExistingDirectory(self, "Select Project Directory")
