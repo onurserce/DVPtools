@@ -89,9 +89,27 @@ class MainWindow(QMainWindow):
                 self.project_directory = self.config.get('project_directory', 'Unknown Directory')
                 self.creation_timestamp = self.config.get('creation_timestamp', 'Unknown Timestamp')
 
+                # Update self.selected_directory with the loaded project's directory
+                self.selected_directory = self.project_directory
+
+                # Update the UI to reflect the loaded project
                 self.project_info_label.setText(f"Project Name: {self.project_name}\n"
                                                 f"Directory: {self.project_directory}\n"
                                                 f"Created: {self.creation_timestamp}")
+
+                # Disable project creation UI elements to focus on the loaded project
+                self.select_dir_button.setEnabled(False)
+                self.project_name_input.setEnabled(False)
+                self.create_project_button.setEnabled(False)
+
+                # Show user the loaded project's name in the input field
+                self.project_name_input.setText(self.project_name)
+
+                show_message(
+                    title='Project Loaded',
+                    message=f"Project '{self.project_name}' has been successfully loaded from:\n{self.project_directory}",
+                    icon=QMessageBox.Information
+                )
             else:
                 QMessageBox.warning(self, "Load Project", "Failed to load the project configuration.")
         else:
