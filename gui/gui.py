@@ -3,16 +3,6 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QFileDialo
 from project_utils import create_new_project
 
 
-def show_success_message(project_name: str, project_dir: str):
-    # Todo: generalize this function so that it can show any message in general.
-    message_box = QMessageBox()
-    message_box.setIcon(QMessageBox.Information)
-    message_box.setWindowTitle("Project Created")
-    message_box.setText(f"Project '{project_name}' has been successfully created at:\n{project_dir}")
-    message_box.setStandardButtons(QMessageBox.Ok)
-    message_box.exec()
-
-
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -64,13 +54,42 @@ class MainWindow(QMainWindow):
             project_name = self.project_name_input.text()
             if project_name:  # Check if the project name is not empty
                 create_new_project(self.selected_directory, project_name)
-                show_success_message(project_name, self.selected_directory)
+                show_message(
+                    title='Project Created',
+                    message=f"Project '{project_name}' has been successfully created at:\n{self.selected_directory}",
+                    icon=QMessageBox.Information
+                )
             else:
                 # Inform the user that project name is required
                 QMessageBox.warning(self, "Project Name Required", "Please enter a project name.")
         else:
             # This condition may not be necessary if the button is disabled correctly
             QMessageBox.warning(self, "Directory Not Selected", "Please select a project directory first.")
+
+
+def show_message(title: str, message: str, icon: QMessageBox.Icon = QMessageBox.Information) -> None:
+    """
+    Displays a message box with the specified title, message, and icon.
+
+    This function generalizes the message box display, allowing for various types of messages
+    including information, warnings, errors, and success notifications, depending on the icon chosen.
+
+    Parameters:
+    - title (str): The title of the message box window.
+    - message (str): The message to be displayed in the message box.
+    - icon (QMessageBox.Icon, optional): The icon to be displayed in the message box. Defaults to
+      QMessageBox.Information indicating an informational message. Other options include QMessageBox.Warning,
+      QMessageBox.Error, and QMessageBox.Question which can be used to indicate different types of messages.
+
+    Returns:
+    - None
+    """
+    message_box = QMessageBox()
+    message_box.setIcon(icon)
+    message_box.setWindowTitle(title)
+    message_box.setText(message)
+    message_box.setStandardButtons(QMessageBox.Ok)
+    message_box.exec()
 
 
 if __name__ == "__main__":
