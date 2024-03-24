@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QFileDialog, QLineEdit, QVBoxLayout, QWidget, \
-    QMessageBox, QLabel, QGroupBox
+    QMessageBox, QLabel, QGroupBox, QTabWidget
 from project_utils import create_new_project, load_project_config
 
 
@@ -23,19 +23,29 @@ class MainWindow(QMainWindow):
         self.move(rect.topLeft())
 
     def init_ui(self):
-        central_widget = QWidget()
-        self.setCentralWidget(central_widget)
-        layout = QVBoxLayout(central_widget)
+
+        # Create the tab widget
+        self.tabs = QTabWidget()
+        self.setCentralWidget(self.tabs)
+
+        # First tab
+        self.tab1 = QWidget()
+        self.tabs.addTab(self.tab1, "Project Manager")
+
+        # Layout for the first tab
+        tab1_layout = QVBoxLayout(self.tab1)
 
         # Load project group
-        self.load_project_button = QPushButton("Load Project")
-        self.load_project_button.clicked.connect(self.on_load_project)
         load_project_group = QGroupBox("Load Project")
         load_project_layout = QVBoxLayout(load_project_group)
+        self.load_project_button = QPushButton("Load Project")
+        self.load_project_button.clicked.connect(self.on_load_project)
         load_project_layout.addWidget(self.load_project_button)
-        layout.addWidget(load_project_group)
+        tab1_layout.addWidget(load_project_group)
 
         # New project group
+        new_project_group = QGroupBox("New Project")
+        new_project_layout = QVBoxLayout(new_project_group)
         self.select_dir_button = QPushButton("Select Project Directory")
         self.select_dir_button.clicked.connect(self.on_select_directory)
         self.selected_dir_label = QLabel("Selected directory: None")
@@ -43,22 +53,24 @@ class MainWindow(QMainWindow):
         self.project_name_input.setPlaceholderText("Enter project name")
         self.create_project_button = QPushButton("Create New Project")
         self.create_project_button.clicked.connect(self.on_create_new_project)
-        new_project_group = QGroupBox("New Project")
-        new_project_layout = QVBoxLayout(new_project_group)
         new_project_layout.addWidget(self.select_dir_button)
         new_project_layout.addWidget(self.selected_dir_label)
         new_project_layout.addWidget(self.project_name_input)
         new_project_layout.addWidget(self.create_project_button)
-        layout.addWidget(new_project_group)
+        tab1_layout.addWidget(new_project_group)
 
         # Reset button
         self.reset_button = QPushButton("Reset")
         self.reset_button.clicked.connect(self.on_reset)
-        layout.addWidget(self.reset_button)
+        tab1_layout.addWidget(self.reset_button)
 
         # Project info label
         self.project_info_label = QLabel("No project loaded")
-        layout.addWidget(self.project_info_label)
+        tab1_layout.addWidget(self.project_info_label)
+
+        # Second tab (empty for now)
+        self.tab2 = QWidget()
+        self.tabs.addTab(self.tab2, "Another Tab")
 
     def on_select_directory(self):
         project_dir = QFileDialog.getExistingDirectory(self, "Select Project Directory")
