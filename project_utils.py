@@ -54,8 +54,6 @@ def create_new_project(project_dir: str, project_name: str) -> None:
     - project_dir (str): The directory where the project will be created.
     - project_name (str): The name of the project.
     """
-    if not project_name:
-        project_name = "NewProject"  # Default project name
 
     full_path = os.path.join(project_dir, project_name)
     os.makedirs(full_path, exist_ok=False)
