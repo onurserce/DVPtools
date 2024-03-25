@@ -26,9 +26,9 @@ def create_config_file(project_path: str, project_name: str) -> None:
         yaml.dump(config, config_file)
 
 
-def load_project_config(config_path: str) -> dict:
+def get_project_config(config_path: str) -> dict:
     """
-    Loads the project configuration from a YAML file.
+    Returns the project configuration dictionary from a YAML file.
 
     Parameters:
     - config_path (str): The path to the config.yaml file.
@@ -36,7 +36,6 @@ def load_project_config(config_path: str) -> dict:
     Returns:
     - dict: A dictionary containing the project configuration. Returns an empty dictionary if loading fails.
     """
-    # ToDo: Don't return empty dictionary, that could cause silent errors.
     try:
         with open(config_path, 'r') as config_file:
             config = yaml.safe_load(config_file)
