@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QGroupBox, QPushButton, QLabel, QLineEdit, QFileDialog, QMessageBox
-from project_utils import create_new_project, load_project_config
+from project_utils import create_new_project, get_project_config
 from os import path
 
 
@@ -65,28 +65,14 @@ class ProjectManagerTab(QWidget):
                         message=str(err) + f"\n\nPlease choose another name or location for your project",
                         icon=QMessageBox.Critical)
                     return
-                load_project_config(path.join(self.selected_directory, "config.yaml"))
-                # ToDo: loading the project config doesn't update the GUI (info label). Because GUI updates are made in
-                #  on_load_project and not in load_project_config. Loading project and loading project config are not
-                #  the same. I need to implement load project function.
-                self.update_ui_state(project_loaded=True)
+                self.load_project(path.join(self.selected_directory, "config.yaml"))
             else:
                 QMessageBox.warning(self, "Project Name Required", "Please enter a project name.")
 
     def on_load_project(self):
         config_path = QFileDialog.getOpenFileName(self, "Select config.yaml", "", "YAML Files (*.yaml *.yml)")[0]
         if config_path:
-            self.config = load_project_config(config_path)
-            if self.config:
-                self.project_name = self.config.get('project_name', 'Unknown Project')
-                self.project_directory = self.config.get('project_directory', 'Unknown Directory')
-                self.creation_timestamp = self.config.get('creation_timestamp', 'Unknown Timestamp')
-                self.selected_directory = self.project_directory
-                self.project_info_label.setText(
-                    f"Project Name: {self.project_name}\nDirectory: {self.project_directory}\nCreated: {self.creation_timestamp}")
-                self.update_ui_state(project_loaded=True)
-            else:
-                QMessageBox.warning(self, "Load Project", "Failed to load the project configuration.")
+            self.load_project(config_path)
         else:
             QMessageBox.warning(self, "Load Project", "No config file selected.")
 
@@ -94,6 +80,18 @@ class ProjectManagerTab(QWidget):
         self.selected_directory = None
         self.config = None
         self.update_ui_state(reset=True)
+
+    def load_project(self, config_path: str):
+        self.config = get_project_config(config_path)
+        if self.config:
+            self.project_name = self.config.get('project_name', 'Unknown Project')
+            self.project_directory = self.config.get('project_directory', 'Unknown Directory')
+            self.creation_timestamp = self.config.get('creation_timestamp', 'Unknown Timestamp')
+            self.selected_directory = self.project_directory
+            self.update_ui_state(project_loaded=True)
+        else:
+            QMessageBox.warning(self, "Load Project", "Failed to load the project.")
+            raise Exception
 
     def update_ui_state(self, reset=False, directory_selected=False, project_loaded=False):
         """Updates the UI state based on the user action."""
@@ -116,3 +114,13 @@ class ProjectManagerTab(QWidget):
             self.select_dir_button.setEnabled(False)
             self.load_project_button.setEnabled(False)
             self.reset_button.setEnabled(True)
+
+            # Update the project info label using the current configuration
+            if self.config:
+                project_name = self.config.get('project_name', 'Unknown Project')
+                project_directory = self.config.get('project_directory', 'Unknown Directory')
+                creation_timestamp = self.config.get('creation_timestamp', 'Unknown Timestamp')
+                self.project_info_label.setText(
+                    f"Project Name: {project_name}\n"
+                    f"Directory: {project_directory}\n"
+                    f"Created: {creation_timestamp}")
