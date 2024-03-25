@@ -17,14 +17,6 @@ class ProjectManagerTab(QWidget):
         self.project_info_label = QLabel("No project loaded. Please load an existing project or create a new one.")
         layout.addWidget(self.project_info_label)
 
-        # Load project group
-        load_project_group = QGroupBox("Load Project")
-        load_project_layout = QVBoxLayout(load_project_group)
-        self.load_project_button = QPushButton("Load Project")
-        self.load_project_button.clicked.connect(self.on_load_project)
-        load_project_layout.addWidget(self.load_project_button)
-        layout.addWidget(load_project_group)
-
         # New project group
         new_project_group = QGroupBox("New Project")
         new_project_layout = QVBoxLayout(new_project_group)
@@ -40,6 +32,14 @@ class ProjectManagerTab(QWidget):
         new_project_layout.addWidget(self.project_name_input)
         new_project_layout.addWidget(self.create_project_button)
         layout.addWidget(new_project_group)
+
+        # Load project group
+        load_project_group = QGroupBox("Load Project")
+        load_project_layout = QVBoxLayout(load_project_group)
+        self.load_project_button = QPushButton("Load Project")
+        self.load_project_button.clicked.connect(self.on_load_project)
+        load_project_layout.addWidget(self.load_project_button)
+        layout.addWidget(load_project_group)
 
         # Reset button
         self.reset_button = QPushButton("Reset")
