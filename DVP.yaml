@@ -32,5 +32,4 @@ dependencies:
     - tqdm
     - dash
     - PySide6
-    - PyQt6  # ToDo: remove this and test the application
     - "napari[all]"
