@@ -59,13 +59,19 @@ class ProjectManagerTab(QWidget):
             if project_name:
                 try:
                     create_new_project(self.selected_directory, project_name)
+                    # Successfully created the project, now load it
+                    self.load_project(path.join(self.selected_directory, project_name, "config.yaml"))
+                    # Inform the user that the project has been created and loaded
+                    self.main_window.show_message(
+                        title="Project Created",
+                        message=f"Project '{project_name}' has been successfully created and loaded.",
+                        icon=QMessageBox.Information)
                 except FileExistsError as err:
                     self.main_window.show_message(
                         title="Project already exists",
-                        message=str(err) + f"\n\nPlease choose another name or location for your project",
+                        message=str(err) + "\n\nPlease choose another name or location for your project",
                         icon=QMessageBox.Critical)
                     return
-                self.load_project(path.join(self.selected_directory, "config.yaml"))
             else:
                 QMessageBox.warning(self, "Project Name Required", "Please enter a project name.")
 
@@ -73,6 +79,13 @@ class ProjectManagerTab(QWidget):
         config_path = QFileDialog.getOpenFileName(self, "Select config.yaml", "", "YAML Files (*.yaml *.yml)")[0]
         if config_path:
             self.load_project(config_path)
+            # Assuming load_project updates self.config with the loaded project's name
+            if self.config:
+                project_name = self.config.get('project_name', 'Unknown Project')
+                self.main_window.show_message(
+                    title="Project Loaded",
+                    message=f"Project '{project_name}' has been successfully loaded.",
+                    icon=QMessageBox.Information)
         else:
             QMessageBox.warning(self, "Load Project", "No config file selected.")
 
