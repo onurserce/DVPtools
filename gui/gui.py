@@ -1,13 +1,15 @@
 from PySide6.QtWidgets import QApplication, QMainWindow, QTabWidget, QMessageBox
 from tabs.project_manager import ProjectManagerTab
 from tabs.another_tab import AnotherTab
+
+
 # ToDo: Find a better import for tabs.
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Project Creator & Loader")
+        self.setWindowTitle("Deep Visual Proteomics toolbox. Version: dev.0.0.1")  # ToDo: Add version
         self.init_ui()
         self.center_and_resize_window()
 
