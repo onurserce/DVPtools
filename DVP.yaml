@@ -22,6 +22,7 @@ dependencies:
     - aicsimageio
 #    - "cellpose[gui]"  Will be built from my fork of the original source [https://github.com/onurserce/cellpose.git]
     - notebook
+    - ipywidgets  # This is temporary (for sharing notebooks with Edwin so that he can be faster)
     - bioformats_jar
     - pyyaml
     - pandas
@@ -30,3 +31,5 @@ dependencies:
     - matplotlib
     - tqdm
     - dash
+    - PySide6
+    - "napari[all]"
