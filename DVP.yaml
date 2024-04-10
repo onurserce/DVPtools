@@ -33,3 +33,4 @@ dependencies:
     - dash
     - PySide6
     - "napari[all]"
+#    - cellpose-napari will this be required or should I just use napari?
