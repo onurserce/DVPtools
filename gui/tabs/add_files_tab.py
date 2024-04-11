@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QWidget
 
 
-class AnotherTab(QWidget):
+class AddFilesTab(QWidget):
     def __init__(self, main_window=None):
         super().__init__()
         self.main_window = main_window
