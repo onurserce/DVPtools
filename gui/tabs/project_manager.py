@@ -127,6 +127,7 @@ class ProjectManagerTab(QWidget):
             self.select_dir_button.setEnabled(False)
             self.load_project_button.setEnabled(False)
             self.reset_button.setEnabled(True)
+            self.main_window.activate_add_files_tab()
 
             # Update the project info label using the current configuration
             if self.config:
