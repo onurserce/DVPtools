@@ -5,6 +5,7 @@ Codebase for anything related to DVP pipeline
 1) Clone the repository `git clone https://github.com/onurserce/DeepVisualProteomics.git`
 2) Create a conda environment with the recipe DVP.yaml `conda env create -f DVP.yaml`
 3) `conda activate DVP`
+4) Optionally run `pip freeze > requirements.txt` to generate requirements file
 
 ## Usage via GUI
 1) Initiate the DVP GUI (located under DeepVisualProteomics/gui) `python path/to/gui.py`
