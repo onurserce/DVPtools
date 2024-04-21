@@ -6,7 +6,7 @@
 # images_dir:   # Have to be given from the job script due to creation of the folders
 # output_dir:   # Have to be given from the job script due to creation of the folders
 # Todo: read this file from a job script to initiate the jobs (requires bash scripting)
-batch_size: 10
+batch_size: 50
 
 # Cellpose model parameters
 model: cyto3
@@ -15,5 +15,3 @@ diameter: 40
 flow_threshold: 0
 cellprob_threshold: 0
 min_size: 30
-
-# ToDo: implement reading of this file from run_cellpose.py
