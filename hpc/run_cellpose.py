@@ -37,8 +37,9 @@ def cellpose_segment(images, model, channels, diameter, flow_threshold, cellprob
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4:
-        print("Usage: python run_cellpose.py run_cellpose.yaml slurm_array_task_id")
+    if len(sys.argv) != 6:
+        print("Usage: python run_cellpose.py channels_to_segment run_cellpose.yaml images_dir output_dir "
+              "slurm_array_task_id. \n Please note that output_dir must be created before running the segmentation.")
     else:
         start_timer = time.time()
 
@@ -78,6 +79,8 @@ if __name__ == "__main__":
 
         # ToDo: Copy the job submission script, configuration script and this script into the outputs folder. Can be
         #  made uneditable or even a single file
+        print(f"This script is called with the following parameters: \n {sys.argv}")
+        print(f"Config file: {config}")
 
         timefn(start_timer)
         print("Finished successfully.")
