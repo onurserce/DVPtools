@@ -42,6 +42,7 @@ if __name__ == "__main__":
               "slurm_array_task_id. \n Please note that output_dir must be created before running the segmentation.")
     else:
         start_timer = time.time()
+        print(f"Segmentation started. Current time: {start_timer} ")
 
         # Script arguments
         channels_to_segment = [int(sys.argv[1]), 0]  # Todo: Modify this so that it supports multi-channel segmentation
