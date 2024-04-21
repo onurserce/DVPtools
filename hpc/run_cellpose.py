@@ -42,7 +42,6 @@ if __name__ == "__main__":
               "slurm_array_task_id. \n Please note that output_dir must be created before running the segmentation.")
     else:
         start_timer = time.time()
-        print(f"Segmentation started. Current time: {start_timer} ")
 
         # Script arguments
         channels_to_segment = [int(sys.argv[1]), 0]  # Todo: Modify this so that it supports multi-channel segmentation
@@ -55,11 +54,16 @@ if __name__ == "__main__":
         with open(path_to_config_file, 'r') as stream:
             config = yaml.safe_load(stream)
 
+        print(f"This script is called with the following parameters: \n {sys.argv}")
+        print(f"Config file: {config}")
+
         # Subset and read in images
         selected_tiffs = subset_tiffs(images_dir, config['batch_size'], slurm_array_task_id)
         images = [io.imread(tiff) for tiff in selected_tiffs]
+        print(f"Successfully read all {len(selected_tiffs)} images into memory")
 
-        # Generate masks
+        # Start segmentation
+        print(f"Segmentation started. Current time: {start_timer} ")
         masks, flows, styles = cellpose_segment(
             images=images,
             model=config['model'],
@@ -74,14 +78,13 @@ if __name__ == "__main__":
         mask_names = [os.path.split(path)[-1] for path in selected_tiffs if path.endswith('.tiff')]
 
         # Save the output
+        print('Writing outputs to disk')
         io.save_masks(images, masks, flows, mask_names, png=False, tif=True, channels=channels_to_segment,
                       suffix="", save_flows=True, save_outlines=True, dir_above=False, in_folders=True,
                       savedir=output_dir, save_txt=True, save_mpl=False)
 
         # ToDo: Copy the job submission script, configuration script and this script into the outputs folder. Can be
         #  made uneditable or even a single file
-        print(f"This script is called with the following parameters: \n {sys.argv}")
-        print(f"Config file: {config}")
 
         timefn(start_timer)
         print("Finished successfully.")
