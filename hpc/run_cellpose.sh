@@ -2,12 +2,14 @@
 #SBATCH -J run_cellpose
 #SBATCH -o %J_%a_%A.stdout
 #SBATCH -e %J_%a_%A.stderr
-#SBATCH -a 0-2
-#SBATCH -t 10:00
-#SBATCH -c 1
+#SBATCH -a 0-15
+#SBATCH -t 25:00
+#SBATCH -c 2
 #SBATCH --mem=8G
 #SBATCH --mail-type=END
 #SBATCH --mail-user=onur_serce@psych.mpg.de
+
+# batch_size=10 used around peak 2Gb memory (per array task) and took around 5mins with -c=2
 
 module purge
 source "$HOME"/.bashrc
