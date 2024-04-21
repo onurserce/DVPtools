@@ -4,7 +4,6 @@
 #SBATCH -e %j_%A_%a.stderr
 #SBATCH -a 0-10
 #SBATCH -t 10:00
-#SBATCH --qos=short
 #SBATCH -c 1
 #SBATCH --mem=8G
 #SBATCH --mail-type=END
