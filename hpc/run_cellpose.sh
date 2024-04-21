@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH -J run_cellpose
-#SBATCH -o %j_%A_%a.stdout
-#SBATCH -e %j_%A_%a.stderr
-#SBATCH -a 0-10
+#SBATCH -o %J_%a_%A.stdout
+#SBATCH -e %J_%a_%A.stderr
+#SBATCH -a 0-2
 #SBATCH -t 10:00
 #SBATCH -c 1
 #SBATCH --mem=8G
