@@ -21,7 +21,7 @@ dependencies:
   - torchaudio
   - pip:
     - aicsimageio
-    - "cellpose[gui]"
+    - cellpose
     - notebook
     - ipywidgets  # This is temporary (for sharing notebooks with Edwin so that he can be faster)
     - bioformats_jar
@@ -32,6 +32,6 @@ dependencies:
     - matplotlib
     - tqdm
     - dash
-    - PySide6
-    - "napari[all]"
-    - cellpose-napari # will this be required or should I just use napari?
+#    - PySide6
+#    - "napari[all]"
+#    - cellpose-napari # will this be required or should I just use napari?

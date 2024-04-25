@@ -1,0 +1,17 @@
+# Slurm parameters (given by Slurm as arguments to run_cellpose.py)
+# $SLURM_ARRAY_TASK_ID ->
+# $batch_size ->
+
+# IO and Slurm parameters (output_dir must be created in advance)
+# images_dir:   # Have to be given from the job script due to creation of the folders
+# output_dir:   # Have to be given from the job script due to creation of the folders
+# Todo: read this file from a job script to initiate the jobs (requires bash scripting)
+batch_size: 50
+
+# Cellpose model parameters
+model: cyto3
+# channels: [0, 1]  # Same as above. Have to be given from the job script due to the creation of the folders
+diameter: 40
+flow_threshold: 0
+cellprob_threshold: 0
+min_size: 30
