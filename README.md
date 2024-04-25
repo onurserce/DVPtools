@@ -1,5 +1,10 @@
-# DeepVisualProteomics
-Codebase for anything related to DVP pipeline
+# DVPTools
+Codebase for everything related to the DVP pipeline.
+
+*Switching to MannLabs tools as of 25.04.2024*
+- [alphabase](https://github.com/MannLabs/alphabase)
+- [py-lmd](https://github.com/MannLabs/py-lmd)
+- [SPARCSpy](https://github.com/MannLabs/SPARCSpy)
 
 ## Installation 
 1) Clone the repository `git clone https://github.com/onurserce/DeepVisualProteomics.git`
