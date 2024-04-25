@@ -1,27 +1,32 @@
 # DVP.yaml
-# Conda environment recipe for the DVP pipeline Toolbox
+# Conda environment recipe for the DVP toolbox
 # Onur Serçe
-# https://github.com/onurserce/DeepVisualProteomics
+# https://github.com/onurserce/DVPtools
 
 # Usage:
 # conda env create -f DVP.yaml
 
-name: DVP
+name: DVPtools
 channels:
   - conda-forge
-  - defaults
   - pytorch
+  - defaults
 dependencies:
   - pip
   - python
   - ipython
+  - scipy
+  - 'scikit-image>=0.19'
+  - scikit-fmm
+  - opencv
+  - numba
   - pytables
-  - pytorch
+  - pytorch::pytorch
   - torchvision
   - torchaudio
   - pip:
     - aicsimageio
-    - cellpose
+    - "cellpose[GUI]"
     - notebook
     - ipywidgets  # This is temporary (for sharing notebooks with Edwin so that he can be faster)
     - bioformats_jar
@@ -31,7 +36,5 @@ dependencies:
     - seaborn
     - matplotlib
     - tqdm
-    - dash
-#    - PySide6
-#    - "napari[all]"
-#    - cellpose-napari # will this be required or should I just use napari?
+    - PySide6
+    - "napari[all]"
