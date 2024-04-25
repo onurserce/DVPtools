@@ -1,10 +1,10 @@
-# DVP.yaml
-# Conda environment recipe for the DVP toolbox
+# DVPtools.yaml
+# Conda environment recipe for DVP toolbox
 # Onur Serçe
 # https://github.com/onurserce/DVPtools
 
 # Usage:
-# conda env create -f DVP.yaml
+# conda env create -f DVPtools.yaml
 
 name: DVPtools
 channels:
@@ -22,6 +22,7 @@ dependencies:
   - numba
   - pytables
   - pytorch::pytorch
+  - pytorch-lightning
   - torchvision
   - torchaudio
   - pip:
