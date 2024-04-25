@@ -1,59 +1,77 @@
 import os
-from datetime import datetime
-import pandas as pd
 import yaml
+from datetime import datetime
+from typing import Dict
 
 
-def create_config_file(project_path: str, project_name: str) -> None:
-    """
-    Creates a config.yaml file and an HDF5 database file in the project directory with the project settings,
-    including a timestamp of when the project was created, and the name of the database file.
-    """
-    config_path = os.path.join(project_path, 'config.yaml')
-    database_path = os.path.join(project_path, f"{project_name}_database.hdf")
-    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+class ProjectConfig:
+    def __init__(self, project_name: str, project_dir: str, load_from_disk: bool = False):
+        """
+        Initializes the ProjectConfig object, either by creating new configuration
+        or by loading an existing configuration from disk.
 
-    # Project settings
-    config = {
-        'project_name': project_name,
-        'project_directory': project_path,
-        'creation_timestamp': current_time,
-        'database_file': f"{project_name}_database.hdf"
-    }
+        Args:
+        project_name (str): The name of the project.
+        project_dir (str): The directory in which to place the project folder.
+        load_from_disk (bool, optional): Flag to indicate if configuration should
+                                         be loaded from disk instead of creating
+                                         a new one. Defaults to False.
+        """
+        if not load_from_disk:
+            # Class attributes
+            self.project_name = project_name
+            self.project_directory = os.path.join(project_dir, project_name)
+            self.creation_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            self.config_path = os.path.join(self.project_directory, 'config.yaml')
+            self.database_path = os.path.join(self.project_directory, 'database.h5')
 
-    # Write project settings to config.yaml
-    with open(config_path, 'w') as config_file:
-        yaml.dump(config, config_file)
+            os.mkdir(self.project_directory)
+        else:
+            self.load_config(project_name, project_dir)
 
-    # Convert config to a DataFrame and store it in the HDF5 database
-    config_df = pd.DataFrame(list(config.items()), columns=['Variable', 'Value'])
-    config_df.to_hdf(database_path, key='config', mode='w')
+        self.save_config()
 
+    def get_config(self) -> Dict[str, str]:
+        """
+        Returns the config variables in a dictionary
+        """
+        config = vars(self)
+        return config
 
-def get_project_config(config_path: str) -> dict:
-    """
-    Returns the project configuration dictionary from a YAML file.
-    """
-    try:
-        with open(config_path, 'r') as config_file:
+    def set_config(self, config: Dict[str, str]):
+        """
+        Sets the configuration attributes based on the provided dictionary. If the
+        attribute does not exist, it will be created.
+
+        Args:
+        config (Dict[str, str]): A dictionary with configuration key-value pairs.
+        """
+        for key, value in config.items():
+            # Check if the attribute exists in the class and update it
+            if hasattr(self, key):
+                setattr(self, key, value)
+            else:
+                # Handle or ignore extra attributes
+                setattr(self, key, value)
+                print(f"Adding a new attribute '{key}' from the config")
+
+    def save_config(self):
+        """
+        Saves the current configuration file to disk.
+        """
+        config = self.get_config()
+        with open(self.config_path, 'w') as config_file:
+            yaml.dump(config, config_file)
+
+    def load_config(self, project_name: str, project_dir: str):
+        """
+        Loads the configuration from a YAML file into the project attributes.
+
+        Args:
+        project_name (str): The name of the project.
+        project_dir (str): The directory where the project folder is located.
+        """
+        self.config_path = os.path.join(project_dir, project_name, 'config.yaml')
+        with open(self.config_path, 'r') as config_file:
             config = yaml.safe_load(config_file)
-            return config if config else {}
-    except Exception as e:
-        print(f"Failed to load project configuration: {e}")
-        return {}
-
-
-def create_new_project(project_dir: str, project_name: str) -> None:
-    """
-    Creates a new project directory and an initial database file.
-    """
-    full_path = os.path.join(project_dir, project_name)
-    try:
-        os.makedirs(full_path, exist_ok=False)
-    except FileExistsError:
-        print(f"Project directory '{full_path}' already exists. Please choose a different name or location.")
-        return
-
-    # Create the initial config file and database
-    create_config_file(full_path, project_name)
-    print(f"Project '{project_name}' created at {project_dir}.")
+        self.set_config(config)
