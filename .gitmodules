@@ -1,0 +1,9 @@
+[submodule "alphabase"]
+	path = alphabase
+	url = https://github.com/onurserce/alphabase.git
+[submodule "py-lmd"]
+	path = py-lmd
+	url = https://github.com/onurserce/py-lmd.git
+[submodule "SPARCSpy"]
+	path = SPARCSpy
+	url = https://github.com/onurserce/SPARCSpy.git
