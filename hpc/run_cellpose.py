@@ -73,6 +73,7 @@ if __name__ == "__main__":
             flow_threshold=config['flow_threshold'],
             cellprob_threshold=config['cellprob_threshold'],
             min_size=config['min_size'])
+        # Todo: This is messy, implement kwargs dictionary (batch_size needs to be a parameter of cellpose_segment)
 
         # Same as the original image names
         mask_names = [os.path.split(path)[-1] for path in selected_tiffs if path.endswith('.tiff')]
