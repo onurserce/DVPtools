@@ -28,6 +28,7 @@ dependencies:
   - pip:
     - aicsimageio
     - "cellpose[GUI]"
+#    - cellpose
     - notebook
     - ipywidgets  # This is temporary (for sharing notebooks with Edwin so that he can be faster)
     - bioformats_jar
