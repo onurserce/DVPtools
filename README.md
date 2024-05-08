@@ -8,7 +8,7 @@ Codebase for everything related to the DVP pipeline.
 
 ## Installation via Anaconda/miniconda
 1) Clone the repository `git clone --recurse-submodules https://github.com/onurserce/DVPtools.git` and navigate inside `cd path/to/your/DVPtools`
-2) Create a new environment with the recipe file DVPtools.yaml `conda env create -f DVPtools.yaml`. For headless systems like computing clusters, use DVPtools_headless.yaml instead.
+2) Create a new environment with the recipe file DVPtools.yaml `conda env create -f DVPtools.yaml` (**INFO:** use _DVPtools_headless.yaml_ for headless systems)
 3) Activate the environment `conda activate DVPtools`
 4) Install alphabase, SPARCSpy and py-lmd editable using pip `pip install -e alphabase/. py-lmd/. SPARCSpy/.`
 5) [Optional] Run `conda list > conda_list` and `pip freeze > pip_freeze.txt` to keep a record of all installed packages with their versions
