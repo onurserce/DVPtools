@@ -37,6 +37,9 @@ def cellpose_segment(images, model, channels, diameter, flow_threshold, cellprob
 
 
 if __name__ == "__main__":
+    # ToDo: Try out different normalization parameters to see if I am able to segment cFOS positive cells...
+    raise Exception("See this regarding the normalization before doing anything! "
+                    "https://forum.image.sc/t/cellpose-missing-most-cells-in-sparsely-populated-image/76444/2")
     if len(sys.argv) != 6:
         print("Usage: python run_cellpose.py channels_to_segment run_cellpose.yaml images_dir output_dir "
               "slurm_array_task_id. \n Please note that output_dir must be created before running the segmentation.")
@@ -61,6 +64,14 @@ if __name__ == "__main__":
         selected_tiffs = subset_tiffs(images_dir, config['batch_size'], slurm_array_task_id)
         images = [io.imread(tiff) for tiff in selected_tiffs]
         print(f"Successfully read all {len(selected_tiffs)} images into memory")
+
+        results = []
+        with ThreadPoolExecutor() as executor:
+            futures = []
+            for img in images:
+                futures.append(executor.submit(cellpose_segment, [img], ...))
+            for future in futures:
+                results.append(future.result())
 
         # Start segmentation
         print(f"Segmentation started. Current time: {start_timer} ")
