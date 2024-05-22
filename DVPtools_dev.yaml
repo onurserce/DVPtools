@@ -1,0 +1,43 @@
+# DVPtools.yaml
+# Conda environment recipe for DVP toolbox
+# Onur Serçe
+# https://github.com/onurserce/DVPtools
+
+# Usage:
+# conda env create -f DVPtools_dev.yaml
+
+name: DVPtools_dev
+channels:
+  - conda-forge
+  - pytorch
+  - defaults
+dependencies:
+  - pip
+  - python
+  - ipython
+  - scipy
+  - 'scikit-image>=0.19'
+  - scikit-fmm
+  - opencv
+  - numba
+  - pytables
+  - pytorch::pytorch
+  - pytorch-lightning
+  - torchvision
+  - torchaudio
+  - pip:
+    - gseapy
+    - aicsimageio
+    - "cellpose[GUI]"
+    - cellpose
+    - notebook
+    - ipywidgets  # This is temporary (for sharing notebooks with Edwin so that he can be faster)
+    - bioformats_jar
+    - pyyaml
+    - pandas
+    - numpy
+    - seaborn
+    - matplotlib
+    - tqdm
+#    - PySide6
+    - "napari[all]"
