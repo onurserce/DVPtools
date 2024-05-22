@@ -5,6 +5,7 @@ Codebase for everything related to the DVP pipeline.
 - [alphabase](https://github.com/MannLabs/alphabase)
 - [py-lmd](https://github.com/MannLabs/py-lmd)
 - [SPARCSpy](https://github.com/MannLabs/SPARCSpy)
+- ToDo: Add SPARCStools
 
 ## Installation
 
@@ -33,3 +34,6 @@ submodules (steps 1 and 2 above):
 
 1) Initiate the DVP GUI (located under DeepVisualProteomics/gui) `python path/to/gui.py`
 2) Create a new project by choosing a location and giving it a name (or load an existing project from a project config.yaml file)
+
+## Some notes
+- DVPtools_dev.yaml file is the environment file that has additional data analysis packages (e.g. gseapy)
