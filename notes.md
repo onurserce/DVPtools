@@ -29,3 +29,11 @@
   - Check out https://www.nitrc.org/frs/?group_id=1341
   - For Mac: [QuickNII-ABAMouse-v3-2017.dmg](https://www.nitrc.org/frs/download.php/11553/QuickNII-ABAMouse-v3-2017.dmg)
 
+# Registration to the brain atlas
+
+- Need the images of consecutive sections (low res, brightfield would be best)
+- Anchor using deepslice, feed the data into quicknii and export rainbow maps
+
+- There’s a JSON file that contains entries like the below:
+{"index":281,"red":26,"green":150,"blue":107,"name":"Agranular insular area, dorsal part, layer 1"}
+Implement a logic to get ROIs. Perhaps reading this in as a DataFrame would be a good start...
