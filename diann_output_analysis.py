@@ -106,3 +106,32 @@ Genes_median['LFQ'] = (Genes_median['LFQ'] - Genes_median['LFQ'].min()) / Genes_
 Genes_w_weights = [str(Genes_median.loc[entry, 'Gene'])+', '+f"{Genes_median.loc[entry, 'LFQ']:.18f}" for entry in Genes_median.index]
 pd.Series(Genes_w_weights).to_clipboard(index=False)
 
+# Are NeuN, Fos and Gad67 detected?
+# NeuN = Q8BIF2
+# Fos = P01101
+# Gad67 = P48318
+
+Q8BIF2 = np.log2(PgMatrix).loc['Q8BIF2'].drop(['0', '25'], level=0).reset_index()
+P48318 = np.log2(PgMatrix).loc['P48318'].drop(['0', '25'], level=0).reset_index()
+sb.barplot(data=Q8BIF2, x='Shapes', y='Q8BIF2')
+plt.show()
+
+neun_gad67 = np.log2(PgMatrix).loc[['Q8BIF2', 'P48318']].drop(['0', '25'], level=0, axis='columns').T
+medians = np.log2(PgMatrix).drop(['0', '25'], level=0, axis='columns').T.median(1)
+mins = np.log2(PgMatrix).drop(['0', '25'], level=0, axis='columns').T.min(1)
+maxs = np.log2(PgMatrix).drop(['0', '25'], level=0, axis='columns').T.max(1)
+neun_gad67['sample_min'] = mins
+neun_gad67['sample_median'] = medians
+neun_gad67['sample_max'] = maxs
+neun_gad67.rename(columns={'Q8BIF2': 'NeuN', 'P48318': 'Gad67'}, inplace=True)
+
+melted = neun_gad67.reset_index().melt(id_vars=['Shapes', 'Replicate'], value_name='Log2(exp)')
+
+sb.set_palette('colorblind')
+
+sb.boxplot(data=melted, x='Log2(exp)', y='Shapes', hue='Pg')
+plt.legend(bbox_to_anchor=(0.65, 1), loc='upper left')
+plt.grid(axis="x", linestyle="--")
+plt.show()
+
+np.log2(PgMatrix).drop(['0', '25'], level=0, axis='columns').T.groupby('Shapes').median()
