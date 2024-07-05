@@ -103,27 +103,24 @@ for Pg in Genes_median.index.copy(deep=True):
 Genes_median['Gene'].to_clipboard(index=False)
 
 Genes_median['LFQ'] = (Genes_median['LFQ'] - Genes_median['LFQ'].min()) / Genes_median['LFQ'].max()
-Genes_w_weights = [str(Genes_median.loc[entry, 'Gene'])+', '+f"{Genes_median.loc[entry, 'LFQ']:.18f}" for entry in Genes_median.index]
+Genes_w_weights = [str(Genes_median.loc[entry, 'Gene']) + ', ' + f"{Genes_median.loc[entry, 'LFQ']:.18f}" for entry in
+                   Genes_median.index]
 pd.Series(Genes_w_weights).to_clipboard(index=False)
 
 # Are NeuN, Fos and Gad67 detected?
 # NeuN = Q8BIF2
 # Fos = P01101
+# FosB = P13346
 # Gad67 = P48318
 
-Q8BIF2 = np.log2(PgMatrix).loc['Q8BIF2'].drop(['0', '25'], level=0).reset_index()
-P48318 = np.log2(PgMatrix).loc['P48318'].drop(['0', '25'], level=0).reset_index()
-sb.barplot(data=Q8BIF2, x='Shapes', y='Q8BIF2')
-plt.show()
-
-neun_gad67 = np.log2(PgMatrix).loc[['Q8BIF2', 'P48318']].drop(['0', '25'], level=0, axis='columns').T
+neun_gad67 = np.log2(PgMatrix).loc[['Q8BIF2', 'P48318', 'P13346']].drop(['0', '25'], level=0, axis='columns').T
 medians = np.log2(PgMatrix).drop(['0', '25'], level=0, axis='columns').T.median(1)
 mins = np.log2(PgMatrix).drop(['0', '25'], level=0, axis='columns').T.min(1)
 maxs = np.log2(PgMatrix).drop(['0', '25'], level=0, axis='columns').T.max(1)
-neun_gad67['sample_min'] = mins
-neun_gad67['sample_median'] = medians
-neun_gad67['sample_max'] = maxs
-neun_gad67.rename(columns={'Q8BIF2': 'NeuN', 'P48318': 'Gad67'}, inplace=True)
+neun_gad67['group_min'] = mins
+neun_gad67['group_median'] = medians
+neun_gad67['group_max'] = maxs
+neun_gad67.rename(columns={'Q8BIF2': 'NeuN', 'P48318': 'Gad67', 'P13346': 'FosB'}, inplace=True)
 
 melted = neun_gad67.reset_index().melt(id_vars=['Shapes', 'Replicate'], value_name='Log2(exp)')
 
@@ -134,4 +131,45 @@ plt.legend(bbox_to_anchor=(0.65, 1), loc='upper left')
 plt.grid(axis="x", linestyle="--")
 plt.show()
 
-np.log2(PgMatrix).drop(['0', '25'], level=0, axis='columns').T.groupby('Shapes').median()
+# Heatmap of Gad67, NeuN, FosB with min, max, median
+pivoted = melted.pivot_table(index='Pg', columns='Shapes', values='Log2(exp)', aggfunc='median')
+pivoted = pivoted.loc[
+    ['group_max', 'Gad67', 'NeuN', 'group_median', 'FosB', 'group_min'],
+    ['50', '125', '250', '500', '1000']
+]
+sb.heatmap(data=pivoted, annot=True, fmt=".1f")
+plt.tight_layout()
+plt.show()
+#
+
+# Calculate CVs
+stds = np.log2(PgMatrix).T.groupby('Shapes').std().T
+means = np.log2(PgMatrix).T.groupby('Shapes').mean().T
+cvs = stds / means
+
+# Plot CVs
+sb.boxplot(data=cvs.loc[:, ['0', '25', '50', '125', '250', '500', '1000']],
+           notch=True, showcaps=False,
+           flierprops={'marker': 'x'},
+           boxprops={"facecolor": (.3, .5, .7, .5)},
+           medianprops={"color": "r", "linewidth": 2}, )
+plt.xlabel('Number of dissected cells (n=3 replicates)')
+plt.ylabel('Cofficient of variation (CV)')
+plt.ylim(0, 0.3)
+plt.tight_layout()
+plt.grid(axis="y", linestyle="--")
+plt.show()
+#
+
+# Plot LFQs for all samples
+sb.boxplot(data=np.log2(PgMatrix).unstack().to_frame().rename(columns={0: 'Log2(LFQ)'}),
+           x='Shapes', y='Log2(LFQ)', hue='Replicate',
+           notch=True, showcaps=False,
+           flierprops={'marker': 'x'},
+           #      boxprops={"facecolor": (.3, .5, .7, .5)},
+           medianprops={"color": "r", "linewidth": 2}
+           )
+plt.grid(axis="y", linestyle="--")
+plt.show()
+#
+
