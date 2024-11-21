@@ -10,10 +10,11 @@ name: DVPtools_dev
 channels:
   - conda-forge
   - pytorch
+  - https://repo.anaconda.com/pkgs/free
   - defaults
 dependencies:
   - pip
-  - python
+  - python=3.11
   - ipython
   - scipy
   - 'scikit-image>=0.19'
@@ -25,6 +26,7 @@ dependencies:
   - pytorch-lightning
   - torchvision
   - torchaudio
+  - dask
   - pip:
     - gseapy
     - aicsimageio
@@ -35,9 +37,10 @@ dependencies:
     - bioformats_jar
     - pyyaml
     - pandas
-    - numpy
+    - numpy=1.26.4
     - seaborn
     - matplotlib
     - tqdm
+    - joblib
 #    - PySide6
     - "napari[all]"
