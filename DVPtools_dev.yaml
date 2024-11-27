@@ -31,7 +31,7 @@ dependencies:
     - gseapy
     - aicsimageio
     - "cellpose[GUI]"
-    - cellpose
+    - bokeh!=3.0.*,>=2.4.2
     - notebook
     - ipywidgets  # This is temporary (for sharing notebooks with Edwin so that he can be faster)
     - bioformats_jar
